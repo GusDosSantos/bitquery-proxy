@@ -1,10 +1,20 @@
 export const config = {
   api: {
-    bodyParser: true, // ensures req.body is automatically parsed
+    bodyParser: true,
   },
 };
 
 export default async function handler(req, res) {
+  // Allow requests from Carrd (CORS)
+  res.setHeader("Access-Control-Allow-Origin", "https://terminaltestt.carrd.co");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Handle preflight OPTIONS request
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   try {
     const body = req.body;
 
