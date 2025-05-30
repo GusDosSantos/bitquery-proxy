@@ -5,12 +5,11 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-  // CORS headers
+  // CORS for Carrd
   res.setHeader("Access-Control-Allow-Origin", "https://terminaltestt.carrd.co");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  // Handle preflight
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
@@ -24,13 +23,19 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-API-KEY": "ory_at_iz-WrBEGsFX3dt7Seajvbpxn3z2wF4k6LYSS4yEBsdE.g_4yCyGCo8wygEKYSg6biDTfEtjVzgpzu9N71Gi4dPY"
+        "Authorization": "Bearer ory_at_iz-WrBEGsFX3dt7Seajvbpxn3z2wF4k6LYSS4yEBsdE.g_4yCyGCo8wygEKYSg6biDTfEtjVzgpzu9N71Gi4dPY"
       },
       body: JSON.stringify(req.body),
     });
 
-    const data = await response.json();
-    res.status(200).json(data);
+    const text = await response.text();
+
+    try {
+      const data = JSON.parse(text);
+      res.status(200).json(data);
+    } catch {
+      throw new Error("Bitquery returned non-JSON: " + text);
+    }
   } catch (error) {
     console.error("Proxy error:", error.message);
     res.status(500).json({ error: "Proxy failed", details: error.message });
