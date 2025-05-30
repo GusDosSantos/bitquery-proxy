@@ -5,7 +5,7 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-  // CORS for Carrd
+  // Handle CORS preflight
   res.setHeader("Access-Control-Allow-Origin", "https://terminaltestt.carrd.co");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -19,11 +19,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "No GraphQL query provided" });
     }
 
-    const response = await fetch("https://graphql.bitquery.io", {
+    const response = await fetch("https://streaming.bitquery.io/eap", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ory_at_iz-WrBEGsFX3dt7Seajvbpxn3z2wF4k6LYSS4yEBsdE.g_4yCyGCo8wygEKYSg6biDTfEtjVzgpzu9N71Gi4dPY"
+        "X-API-KEY": "ory_at_iz-WrBEGsFX3dt7Seajvbpxn3z2wF4k6LYSS4yEBsdE.g_4yCyGCo8wygEKYSg6biDTfEtjVzgpzu9N71Gi4dPY"
       },
       body: JSON.stringify(req.body),
     });
